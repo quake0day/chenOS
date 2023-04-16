@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>WebAssembly chenOS Demo</title>
+    <style>
+      #console {
+        background-color: black;
+        color: lime;
+        font-family: monospace;
+        padding: 1em;
+        white-space: pre-wrap;
+        overflow: auto;
+        width: 100%;
+        height: 300px;
+      }
+      #input {
+        background-color: black;
+        border: none;
+        color: lime;
+        font-family: monospace;
+        outline: none;
+        width: 100%;
+        box-sizing: border-box;
+      }
+    </style>
+
+  </head>
+  <body onload="loadOS()">
+    <h1>WebAssembly chenOS Demo</h1>
+    <div id="console"></div>
+    <input
+      id="input"
+      type="text"
+      placeholder="Type here and press Enter..."
+      onkeydown="handleInput(event)"
+    />
+    <script src="bootloader.js"></script>
+    <script>
+      async function loadOS() {
+        function customPrint(text) {
+          const consoleElement = document.getElementById('console');
+          consoleElement.innerHTML += text + '\n';
+        }
+
+        Module.print = customPrint;
+
+        Module.onRuntimeInitialized = function () {
+          Module.ccall('main', 'void', []);
+        };
+      }
+
+      function customPrint(text) {
+  const consoleElement = document.getElementById('console');
+  const output = document.createElement('div'); // Create a new div element to hold the output
+  output.textContent = text;
+  consoleElement.appendChild(output); // Append the output div to the console
+}
+
+      function handleInput(e) {
+    if (e.key === 'Enter') {
+      const inputElement = e.target;
+      const inputValue = inputElement.value;
+      customPrint('> ' + inputValue); // Display the user input in the console
+      inputElement.value = ''; // Clear the input field
+
+      // Call the process_command_from_js function directly
+      Module.ccall('process_command_from_js', 'void', ['string'], [inputValue]);
+    }
+  }
+    </script>
+  </body>
+</html>
