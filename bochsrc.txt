@@ -1,0 +1,10 @@
+megs: 32
+display_library: x
+romimage: file=$BXSHARE/BIOS-bochs-latest, address=0xf0000
+vgaromimage: file=$BXSHARE/VGABIOS-lgpl-latest
+ata0-master: type=disk, path="disk.img", mode=flat, cylinders=80, heads=2, spt=18
+boot: disk
+log: bochsout.txt
+mouse: enabled=0
+clock: sync=realtime
+
